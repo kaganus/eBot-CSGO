@@ -7,8 +7,7 @@
  * @version     3.0
  * @date        21/10/2012
  */
-$check["php"] = (function_exists('version_compare') && version_compare(phpversion(), '5.3.1', '>='));
-$check["php5.4"] = (function_exists('version_compare') && version_compare(phpversion(), '5.4', '>='));
+$check["php"] = (function_exists('version_compare') && version_compare(phpversion(), '7', '>='));
 $check["mysql"] = extension_loaded('mysqli');
 $check["spl"] = extension_loaded('spl');
 $check["sockets"] = extension_loaded("sockets");
@@ -33,19 +32,12 @@ echo "
 
 echo "PHP Compatibility Test" . PHP_EOL;
 echo "-----------------------------------------------------" . PHP_EOL;
-echo "| PHP 5.3.1 or newer    -> required  -> " . ($check["php"] ? ("[\033[0;32m Yes \033[0m] " . phpversion()) : "[\033[0;31m No \033[0m]") . PHP_EOL;
+echo "| PHP 7 or newer        -> required  -> " . ($check["php"] ? ("[\033[0;32m Yes \033[0m] " . phpversion()) : "[\033[0;31m No \033[0m]") . PHP_EOL;
 echo "| Standard PHP Library  -> required  -> " . ($check["spl"] ? "[\033[0;32m Yes \033[0m]" : "[\033[0;31m No \033[0m]") . PHP_EOL;
 echo "| MySQL                 -> required  -> " . ($check["mysql"] ? "[\033[0;32m Yes \033[0m]" : "[\033[0;31m No \033[0m]") . PHP_EOL;
 echo "| Sockets               -> required  -> " . ($check["sockets"] ? "[\033[0;32m Yes \033[0m]" : "[\033[0;31m No \033[0m]") . PHP_EOL;
 echo "| pthreads              -> required  -> " . ($check["pthreads"] ? "[\033[0;32m Yes \033[0m]" : "[\033[0;31m No \033[0m]") . PHP_EOL;
 echo "-----------------------------------------------------" . PHP_EOL;
-
-if (!$check["php5.4"]) {
-    echo "| We recommand to use PHP5.4 to get better performance !" . PHP_EOL;
-    echo '-----------------------------------------------------' . PHP_EOL;
-}
-
-unset($check["php5.4"]);
 
 if (in_array(false, $check)) {
     echo "| Your php configuration missed, please make sure that you have all feature !" . PHP_EOL;
@@ -67,11 +59,13 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 gc_enable();
 
-function handleShutdown() {
+function handleShutdown()
+{
     global $webSocketProcess;
 
-    if (PHP_OS == "Linux" || PHP_OS == "Darwin")
+    if (PHP_OS == "Linux" || PHP_OS == "Darwin") {
         proc_terminate($webSocketProcess, 9);
+    }
 
     $error = error_get_last();
     if (!empty($error)) {
@@ -85,32 +79,32 @@ register_shutdown_function('handleShutdown');
 
 error_reporting(E_ERROR);
 
-class LoggerArray extends \Threaded {
-
-    public function run() {
-        
+class LoggerArray extends \Threaded
+{
+    public function run()
+    {
     }
-
 }
 
-class LogReceiver extends \Thread {
-
+class LogReceiver extends \Thread
+{
     public $shared_array;
     public $botIp;
     public $botPort;
 
-    public function __construct($shared_array, $botIp, $botPort) {
+    public function __construct($shared_array, $botIp, $botPort)
+    {
         $this->shared_array = $shared_array;
         $this->botIp = $botIp;
         $this->botPort = $botPort;
         $this->start();
     }
 
-    public function run() {
+    public function run()
+    {
         $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         if ($socket) {
             if (socket_bind($socket, $this->botIp, $this->botPort)) {
-                
             } else {
                 echo "can't bind " . $this->botIp . ":" . $this->botPort . "\n";
                 return;
@@ -119,7 +113,6 @@ class LogReceiver extends \Thread {
             echo "can't bind " . $this->botIp . ":" . $this->botPort . "\n";
             return;
         }
-
 
         while (true) {
             $data = "";
@@ -136,7 +129,6 @@ class LogReceiver extends \Thread {
             }
         }
     }
-
 }
 
 $config = \eBot\Config\Config::getInstance();

@@ -13,7 +13,7 @@ The eBot is a full managed server-bot written in PHP and nodeJS. eBot features e
 
 ## Requirements
 * Linux, Windows
-* PHP 5.3 or newer
+* PHP 7 or newer
 * nodeJS
 
 The following extensions are required:
@@ -38,4 +38,3 @@ You can copy, distribute, modify the source code, but you have to keep the licen
 ## See also
 * [eSport-tools.net website](http://www.esport-tools.net/)
 * [Steam Condenser home](https://koraktor.de/steam-condenser)
-
