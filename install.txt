@@ -5,7 +5,7 @@ cd /root/install
 wget https://www.php.net/distributions/php-5.6.40.tar.bz2 -O php-5.6.40.tar.bz2
 tar -xjvf php-5.6.40.tar.bz2
 cd php-5.6.40
-wget https://kgns.me/files/PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch
+wget https://kgns.dev/files/PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch
 patch -p1 < PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch
 rm PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch
 ./configure --prefix /usr/local --with-mysql --enable-maintainer-zts --enable-sockets --with-openssl --with-pdo-mysql 
